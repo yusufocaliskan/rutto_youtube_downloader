@@ -2,6 +2,7 @@ import youtube_dl
 
 link 	= raw_input('Video Linki: ')
 
+
 class RuttoDownloader:
 
 	def __init__(self):
