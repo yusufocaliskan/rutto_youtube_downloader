@@ -1,49 +1,95 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import sys
+import urllib
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 import youtube_dl
 
-link 	= raw_input('Video Linki: ')
-mp3 	= raw_input('Mp3? yes/no:')
+#link 	= raw_input('Video Linki: ')
+#mp3 	= raw_input('Mp3? yes/no:')
 
-class RuttoDownloader:
 
-	def __init__(self):
-		pass
+class RuttoDownloader():
 
-	def download(self, link):
+	#Indir buttonu
+	download_button = ''
 
-		if mp3 == 'yes':
+	#Linki tutar..
+	#Input..
+	link = ''
 
-			ydl_opts = {
-			    'format': 'bestaudio/best',
-			    'postprocessors': [{
-			        'key': 'FFmpegExtractAudio',
-			        'preferredcodec': 'mp3',
-			        'preferredquality': '192',
-			    }]
-			}
-		else:
-			ydl_opts = {}
+	#Panel app..
+	app = ''
+
+	#download as mp3?
+	mp3 = False
+
+	def __init__(self, parent=None):
+		self.ui()		
+
+	# Download işlemini yapar
+	# @link indirilecek link
+	# @return false
+	def download(self):
+
+		link_url = str(self.link.text())
+
+		#Mp3 eklensin mi?
+		#if mp3 == 'yes':
+
+		#	ydl_opts = {
+		#	    'format': 'bestaudio/best',
+		#	    'postprocessors': [{
+		#	        'key': 'FFmpegExtractAudio',
+		#	        'preferredcodec': 'mp3',
+		#	        'preferredquality': '192',
+		#	    }]
+		#	}
+
+		#else:
+		ydl_opts = {}
 
 		with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-		    ydl.download([link])
-		
+		    ydl.download([link_url])
+	
 
-class Logger:
+	#Paneli çiz..
+	# ve
+	# göster
+	def ui(self):
 
-	def debug(self, msg):
-		pass
+		self.app = QApplication(sys.argv)
+		win = QWidget()
+		win.resize(450, 150)
 
-	def warning(self, msg):
-		pass
+		label = QLabel('Video Linki:')
 
-	def error(self, msg):
-		pass
+		self.link = QLineEdit()
+		self.link.setPlaceholderText("YouTube vide Linki") 
+		self.link.setFocus(False)
 
-	def hook(self,d):
-		if d['status'] == 'finished':
-			print('Done downloading, now converting ...')		
+		vbox = QVBoxLayout()
+		vbox.addWidget(label)
+		vbox.addWidget(self.link)
+		vbox.addStretch()
+		hbox = QHBoxLayout()
+
+		self.download_button = QPushButton("Indir")
+		hbox.addStretch()
+		hbox.addWidget(self.download_button)
+
+		vbox.addStretch()
+		vbox.addLayout(hbox)
+		win.setLayout(vbox)
+
+		QObject.connect(self.download_button, SIGNAL('clicked()'),self.download)
+
+		win.setWindowTitle("Rutto YouTube Downloader")
+		win.show()
+		sys.exit(self.app.exec_())
+
 
 Rutto = RuttoDownloader()
-Rutto.download(link);
+#Rutto.download(link);
