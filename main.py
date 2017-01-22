@@ -24,7 +24,7 @@ class RuttoDownloader():
 	app = ''
 
 	#download as mp3?
-	mp3 = False
+	mp3_input = ''
 
 	def __init__(self, parent=None):
 		self.ui()		
@@ -35,21 +35,22 @@ class RuttoDownloader():
 	def download(self):
 
 		link_url = str(self.link.text())
+		is_mp3 = str(self.mp3_input.text())
 
 		#Mp3 eklensin mi?
-		#if mp3 == 'yes':
+		if is_mp3 == 'yes':
 
-		#	ydl_opts = {
-		#	    'format': 'bestaudio/best',
-		#	    'postprocessors': [{
-		#	        'key': 'FFmpegExtractAudio',
-		#	        'preferredcodec': 'mp3',
-		#	        'preferredquality': '192',
-		#	    }]
-		#	}
+			ydl_opts = {
+			    'format': 'bestaudio/best',
+			    'postprocessors': [{
+			        'key': 'FFmpegExtractAudio',
+			        'preferredcodec': 'mp3',
+			        'preferredquality': '192',
+			    }]
+			}
 
-		#else:
-		ydl_opts = {}
+		else:
+			ydl_opts = {}
 
 		with youtube_dl.YoutubeDL(ydl_opts) as ydl:
 		    ydl.download([link_url])
@@ -67,12 +68,14 @@ class RuttoDownloader():
 		label = QLabel('Video Linki:')
 
 		self.link = QLineEdit()
+		self.mp3_input = QLineEdit()
 		self.link.setPlaceholderText("YouTube vide Linki") 
-		self.link.setFocus(False)
+		self.mp3_input.setPlaceholderText("Mp3? yes/no") 
 
 		vbox = QVBoxLayout()
 		vbox.addWidget(label)
 		vbox.addWidget(self.link)
+		vbox.addWidget(self.mp3_input)
 		vbox.addStretch()
 		hbox = QHBoxLayout()
 
